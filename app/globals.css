@@ -1,0 +1,246 @@
+/* ATIB Fan Zone — design system (see docs/DESIGN.md) */
+
+:root {
+  --bg: #07100d;
+  --green: #1db954;
+  --green-deep: #0e7a3e;
+  --gold: #f4c14b;
+  --text: #eafff4;
+  --muted: #7fa093;
+  --line: #1d362c;
+  --danger: #ff6a6a;
+  --amber: #f4c14b;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Archivo", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Soft radial green glows + faint vertical "pitch lines" behind everything. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(60% 50% at 20% 10%, rgba(29, 185, 84, 0.18), transparent 60%),
+    radial-gradient(55% 45% at 85% 90%, rgba(14, 122, 62, 0.16), transparent 60%),
+    var(--bg);
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: repeating-linear-gradient(
+    90deg, transparent 0 38px, rgba(234, 255, 244, 0.6) 38px 39px
+  );
+}
+
+h1, h2, h3, .display {
+  font-family: "Anton", "Archivo", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.label {
+  font-family: "Archivo Narrow", "Archivo", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+a { color: var(--green); }
+
+.app {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 28px 20px 56px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.wide { max-width: 980px; }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+.brand .dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, #cfe9d8 40%, #0c1a14 41%),
+              conic-gradient(#0c1a14 0 25%, transparent 0 50%, #0c1a14 0 75%, transparent 0);
+  box-shadow: 0 0 0 2px var(--line);
+}
+.brand .name { font-family: "Archivo Narrow"; text-transform: uppercase; letter-spacing: 0.22em; font-size: 0.8rem; color: var(--text); }
+
+.card {
+  background: rgba(12, 26, 20, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px;
+  backdrop-filter: blur(6px);
+}
+
+input[type="email"], input[type="text"], input[type="password"], select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #0a1812;
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+}
+input:focus, select:focus { border-color: var(--green); }
+
+button.btn {
+  width: 100%;
+  padding: 15px 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--green), var(--green-deep));
+  color: #04130b;
+  font-family: "Archivo Narrow";
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.08s ease, filter 0.2s ease;
+}
+button.btn:hover { filter: brightness(1.07); }
+button.btn:active { transform: translateY(1px); }
+button.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+button.ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text);
+}
+
+.msg { margin-top: 14px; font-size: 0.92rem; }
+.msg.error { color: var(--danger); }
+.msg.ok { color: var(--green); }
+
+.muted { color: var(--muted); }
+.center { text-align: center; }
+.stack > * + * { margin-top: 14px; }
+
+/* ------------------------------------------------------------------ */
+/* Pack reveal (employee ticket)                                       */
+/* ------------------------------------------------------------------ */
+.pack {
+  position: relative;
+  width: 220px; height: 320px;
+  margin: 8px auto 4px;
+  border-radius: 16px;
+  cursor: pointer;
+  background: linear-gradient(150deg, #0e7a3e, #07100d 55%, #f4c14b);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  animation: bob 2.6s ease-in-out infinite;
+}
+.pack .sheen {
+  position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: sweep 2.8s ease-in-out infinite;
+}
+.pack .hint { position: absolute; bottom: 14px; left: 0; right: 0; }
+.pack.shaking { animation: shake 0.5s ease; }
+@keyframes bob { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-8px) } }
+@keyframes sweep { 0%{ transform: translateX(-120%) } 60%,100%{ transform: translateX(120%) } }
+@keyframes shake {
+  0%,100%{ transform: translateX(0) } 20%{ transform: translateX(-8px) rotate(-2deg) }
+  40%{ transform: translateX(8px) rotate(2deg) } 60%{ transform: translateX(-6px) }
+  80%{ transform: translateX(6px) }
+}
+
+.flash {
+  position: fixed; inset: 0; background: #fff; opacity: 0;
+  pointer-events: none; z-index: 50;
+}
+.flash.on { animation: flash 0.5s ease; }
+@keyframes flash { 0%{ opacity: 0 } 15%{ opacity: 0.9 } 100%{ opacity: 0 } }
+
+/* Holographic supporter card */
+.ticket {
+  position: relative;
+  border-radius: 18px;
+  padding: 2px;
+  background: linear-gradient(120deg, #1db954, #f4c14b, #1db954, #36d1dc, #1db954);
+  background-size: 300% 300%;
+  animation: holo 6s linear infinite, flipin 0.7s ease;
+}
+@keyframes holo { 0%{ background-position: 0% 50% } 100%{ background-position: 300% 50% } }
+@keyframes flipin {
+  0%{ transform: rotateY(90deg); opacity: 0 } 100%{ transform: rotateY(0); opacity: 1 }
+}
+.ticket-inner {
+  background: #08140e;
+  border-radius: 16px;
+  padding: 20px;
+}
+.ticket .fan {
+  font-family: "Anton"; color: var(--gold); font-size: 2.6rem; line-height: 1;
+}
+.qr-box {
+  background: #fff; border-radius: 12px; padding: 12px; width: max-content; margin: 14px auto 0;
+}
+.qr-box canvas, .qr-box img { display: block; }
+
+/* ------------------------------------------------------------------ */
+/* GOAL check-in (scanner)                                             */
+/* ------------------------------------------------------------------ */
+.result-banner {
+  border-radius: 16px; padding: 26px 18px; text-align: center; margin-top: 16px;
+  border: 1px solid var(--line);
+}
+.result-banner.goal { background: linear-gradient(180deg, rgba(29,185,84,0.22), rgba(8,20,14,0.9)); border-color: var(--green); }
+.result-banner.dupe { background: rgba(244,193,75,0.10); border-color: var(--amber); }
+.result-banner.bad  { background: rgba(255,106,106,0.10); border-color: var(--danger); }
+.goal-text {
+  font-family: "Anton"; font-size: 3.4rem; color: var(--green); line-height: 1;
+  animation: slam 0.45s cubic-bezier(0.18, 1.4, 0.4, 1);
+}
+@keyframes slam { 0%{ transform: scale(2.4); opacity: 0 } 60%{ transform: scale(0.92) } 100%{ transform: scale(1); opacity: 1 } }
+.mismatch-flag {
+  display: inline-block; margin-top: 8px; padding: 4px 10px; border-radius: 999px;
+  background: rgba(244,193,75,0.15); color: var(--gold); font-size: 0.8rem;
+}
+
+#reader { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+#reader video { border-radius: 14px; }
+
+/* Dashboard */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.tile { background: rgba(12,26,20,0.7); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+.tile .num { font-family: "Anton"; font-size: 2.4rem; color: var(--gold); line-height: 1; }
+table.matrix { width: 100%; border-collapse: collapse; margin-top: 8px; }
+table.matrix th, table.matrix td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: center; font-variant-numeric: tabular-nums; }
+table.matrix th:first-child, table.matrix td:first-child { text-align: left; }
+table.matrix .hot { color: var(--green); font-weight: 700; }
+
+.row { display: flex; gap: 10px; align-items: center; }
+.row > * { flex: 1; }
+.spacer { flex: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pack, .pack .sheen, .ticket, .goal-text, .flash.on { animation: none !important; }
+  .flash { display: none; }
+}
